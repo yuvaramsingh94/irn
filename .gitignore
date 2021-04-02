@@ -1,0 +1,10 @@
+*.jpg
+*.png
+*.pth
+*.xml
+*.txt
+.ipynb_checkpoints/*
+*.log
+*.pyc
+*.npy
+*.csv

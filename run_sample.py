@@ -82,42 +82,44 @@ if __name__ == '__main__':
     pyutils.Logger(args.log_name + '.log')
     print(vars(args))
 
+    #bubble tracker http://soft-matter.github.io/trackpy/v0.4.2/tutorial/custom-feature-detection.html
+    '''
     if args.train_cam_pass is True:
         import step.train_cam
 
         timer = pyutils.Timer('step.train_cam:')
         step.train_cam.run(args)
-
+    
     if args.make_cam_pass is True:
         import step.make_cam
 
         timer = pyutils.Timer('step.make_cam:')
         step.make_cam.run(args)
-
+    
     if args.eval_cam_pass is True:
         import step.eval_cam
 
         timer = pyutils.Timer('step.eval_cam:')
         step.eval_cam.run(args)
-
+    
     if args.cam_to_ir_label_pass is True:
         import step.cam_to_ir_label
 
         timer = pyutils.Timer('step.cam_to_ir_label:')
         step.cam_to_ir_label.run(args)
-
+    
     if args.train_irn_pass is True:
         import step.train_irn
 
         timer = pyutils.Timer('step.train_irn:')
         step.train_irn.run(args)
-
+    '''
     if args.make_ins_seg_pass is True:
         import step.make_ins_seg_labels
 
         timer = pyutils.Timer('step.make_ins_seg_labels:')
         step.make_ins_seg_labels.run(args)
-
+    '''
     if args.eval_ins_seg_pass is True:
         import step.eval_ins_seg
 
@@ -135,4 +137,5 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.eval_sem_seg:')
         step.eval_sem_seg.run(args)
+    '''
 
