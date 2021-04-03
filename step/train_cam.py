@@ -11,7 +11,7 @@ import voc12.dataloader
 from misc import pyutils, torchutils
 
 
-def validate(model, data_loader):
+def validate(model, data_loader,device):
     print('validating ... ', flush=True, end='')
 
     val_loss_meter = pyutils.AverageMeter('loss1', 'loss2')
@@ -20,9 +20,9 @@ def validate(model, data_loader):
 
     with torch.no_grad():
         for pack in data_loader:
-            img = pack['img']
+            img = pack['img'].to(device,non_blocking=True)
 
-            label = pack['label'].cuda(non_blocking=True)
+            label = pack['label'].to(device,non_blocking=True)
 
             x = model(img)
             loss1 = F.multilabel_soft_margin_loss(x, label)
@@ -39,7 +39,7 @@ def validate(model, data_loader):
 def run(args):
 
     model = getattr(importlib.import_module(args.cam_network), 'Net')()
-
+    device = torch.device("cuda:0")
 
     train_dataset = voc12.dataloader.VOC12ClassificationDataset(args.train_list, voc12_root=args.voc12_root,
                                                                 resize_long=(320, 640), hor_flip=True,
@@ -59,7 +59,7 @@ def run(args):
         {'params': param_groups[1], 'lr': 10*args.cam_learning_rate, 'weight_decay': args.cam_weight_decay},
     ], lr=args.cam_learning_rate, weight_decay=args.cam_weight_decay, max_step=max_step)
 
-    model = torch.nn.DataParallel(model).cuda()
+    model = model.to(device)
     model.train()
 
     avg_meter = pyutils.AverageMeter()
@@ -72,8 +72,8 @@ def run(args):
 
         for step, pack in enumerate(train_data_loader):
 
-            img = pack['img']
-            label = pack['label'].cuda(non_blocking=True)
+            img = pack['img'].to(device,non_blocking=True)
+            label = pack['label'].to(device,non_blocking=True)
 
             x = model(img)
             loss = F.multilabel_soft_margin_loss(x, label)
@@ -94,8 +94,8 @@ def run(args):
                       'etc:%s' % (timer.str_estimated_complete()), flush=True)
 
         else:
-            validate(model, val_data_loader)
+            validate(model, val_data_loader,device)
             timer.reset_stage()
 
     torch.save(model.state_dict(), args.cam_weights_name + '.pth')
-    torch.cuda.empty_cache()
+    #torch.cuda.empty_cache()

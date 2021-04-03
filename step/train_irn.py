@@ -13,7 +13,7 @@ def run(args):
 
     model = getattr(importlib.import_module(args.irn_network), 'AffinityDisplacementLoss')(
         path_index)
-
+    device = torch.device("cuda:0")
     train_dataset = voc12.dataloader.VOC12AffinityDataset(args.train_list,
                                                           label_dir=args.ir_label_out_dir,
                                                           voc12_root=args.voc12_root,
@@ -35,7 +35,7 @@ def run(args):
         {'params': param_groups[1], 'lr': 10*args.irn_learning_rate, 'weight_decay': args.irn_weight_decay}
     ], lr=args.irn_learning_rate, weight_decay=args.irn_weight_decay, max_step=max_step)
 
-    model = torch.nn.DataParallel(model).cuda()
+    model = model.to(device)
     model.train()
 
     avg_meter = pyutils.AverageMeter()
@@ -48,10 +48,10 @@ def run(args):
 
         for iter, pack in enumerate(train_data_loader):
 
-            img = pack['img'].cuda(non_blocking=True)
-            bg_pos_label = pack['aff_bg_pos_label'].cuda(non_blocking=True)
-            fg_pos_label = pack['aff_fg_pos_label'].cuda(non_blocking=True)
-            neg_label = pack['aff_neg_label'].cuda(non_blocking=True)
+            img = pack['img'].to(device,non_blocking=True)
+            bg_pos_label = pack['aff_bg_pos_label'].to(device,non_blocking=True)
+            fg_pos_label = pack['aff_fg_pos_label'].to(device,non_blocking=True)
+            neg_label = pack['aff_neg_label'].to(device,non_blocking=True)
 
             pos_aff_loss, neg_aff_loss, dp_fg_loss, dp_bg_loss = model(img, True)
 
@@ -98,7 +98,7 @@ def run(args):
 
     with torch.no_grad():
         for iter, pack in enumerate(infer_data_loader):
-            img = pack['img'].cuda(non_blocking=True)
+            img = pack['img'].to(device,non_blocking=True)
 
             aff, dp = model(img, False)
 
@@ -108,4 +108,4 @@ def run(args):
     print('done.')
 
     torch.save(model.state_dict(), args.irn_weights_name)
-    torch.cuda.empty_cache()
+    #torch.to.empty_cache()

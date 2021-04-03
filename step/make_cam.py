@@ -61,10 +61,11 @@ def _work(process_id, model, dataset, args):
 
 def run(args):
     model = getattr(importlib.import_module(args.cam_network), 'CAM')()
+    print('loading tyhis cam : ',args.cam_weights_name + '.pth')
     model.load_state_dict(torch.load(args.cam_weights_name + '.pth'), strict=True)
     model.eval()
 
-    n_gpus = torch.cuda.device_count()
+    n_gpus = 1#torch.cuda.device_count()
 
     dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
