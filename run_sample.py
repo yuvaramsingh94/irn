@@ -84,6 +84,7 @@ if __name__ == '__main__':
 
     #bubble tracker http://soft-matter.github.io/trackpy/v0.4.2/tutorial/custom-feature-detection.html
     '''
+    #python run_sample.py --num_workers 15 --voc12_root data/VOCdevkit/VOC2012/ --cam_num_epoches 1
     if args.train_cam_pass is True:
         import step.train_cam
 
@@ -107,13 +108,13 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.cam_to_ir_label:')
         step.cam_to_ir_label.run(args)
-    '''
+    
     if args.train_irn_pass is True:
         import step.train_irn
 
         timer = pyutils.Timer('step.train_irn:')
         step.train_irn.run(args)
-    
+    '''
     if args.make_ins_seg_pass is True:
         import step.make_ins_seg_labels
 

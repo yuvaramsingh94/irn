@@ -104,7 +104,7 @@ def run(args):
 
             dp_mean_list.append(torch.mean(dp, dim=(0, 2, 3)).cpu())
 
-        model.module.mean_shift.running_mean = torch.mean(torch.stack(dp_mean_list), dim=0)
+        model.mean_shift.running_mean = torch.mean(torch.stack(dp_mean_list), dim=0)
     print('done.')
 
     torch.save(model.state_dict(), args.irn_weights_name)
