@@ -25,7 +25,7 @@ class Net(nn.Module):
     def forward(self, x):
 
         x = self.stage1(x)
-        x = self.stage2(x).detach()
+        x = self.stage2(x)#.detach()## possible problem
 
         x = self.stage3(x)
         x = self.stage4(x)
@@ -64,7 +64,7 @@ class CAM(Net):
 
         x = F.conv2d(x, self.classifier.weight)
         x = F.relu(x)
-
+        print('this is x ',x.shape)
         x = x[0] + x[1].flip(-1)
 
         return x

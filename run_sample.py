@@ -90,13 +90,13 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.train_cam:')
         step.train_cam.run(args)
-    
+    '''
     if args.make_cam_pass is True:
         import step.make_cam
 
         timer = pyutils.Timer('step.make_cam:')
         step.make_cam.run(args)
-    
+    '''
     if args.eval_cam_pass is True:
         import step.eval_cam
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.train_irn:')
         step.train_irn.run(args)
-    '''
+    
     if args.make_ins_seg_pass is True:
         import step.make_ins_seg_labels
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.eval_ins_seg:')
         step.eval_ins_seg.run(args)
-    '''
+    
     if args.make_sem_seg_pass is True:
         import step.make_sem_seg_labels
 

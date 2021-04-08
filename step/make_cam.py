@@ -31,7 +31,8 @@ def _work(process_id, model, dataset, args):
 
             strided_size = imutils.get_strided_size(size, 4)
             strided_up_size = imutils.get_strided_up_size(size, 16)
-
+            print('len ',len(pack['img']))
+            print('shape ',pack['img'][0].shape)
             outputs = [model(img[0].cuda(non_blocking=True))
                        for img in pack['img']]
 
